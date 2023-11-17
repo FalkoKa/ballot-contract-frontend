@@ -1,8 +1,12 @@
 import type { NextPage } from "next";
+import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
+import { TokenInfo } from "~~/components/TokenInfo";
 import { WalletInfo } from "~~/components/WalletInfo";
 
 const Home: NextPage = () => {
+  const { address, isConnecting, isDisconnected } = useAccount();
+
   return (
     <>
       <MetaHeader />
@@ -13,7 +17,14 @@ const Home: NextPage = () => {
             <span className="block text-4xl font-bold">Group 8's Ballot Contract Frontend</span>
           </h1>
         </div>
-        <WalletInfo />
+        <div className="flex gap-3">
+          <WalletInfo />
+          {address ? (
+            <TokenInfo address={address as `0x${string}`} tokenAddress="0x7fE72432Df2F96EB07236FF1d23C85d89f5b5D1F" />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </>
   );

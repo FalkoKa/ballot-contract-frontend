@@ -1,3 +1,4 @@
+import { TokenInfo } from "./TokenInfo";
 import { WalletBalance } from "./WalletBalance";
 import { useAccount, useNetwork } from "wagmi";
 
