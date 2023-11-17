@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
+import { WalletInfo } from "~~/components/WalletInfo";
 
 const Home: NextPage = () => {
   return (
@@ -12,6 +13,7 @@ const Home: NextPage = () => {
             <span className="block text-4xl font-bold">Group 8's Ballot Contract Frontend</span>
           </h1>
         </div>
+        <WalletInfo />
       </div>
     </>
   );
