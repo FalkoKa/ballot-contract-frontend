@@ -73,24 +73,4 @@ export class AppService {
       return false;
     }
   }
-
-  async transferTokens() {
-    // todo
-    return null;
-  }
-
-  async delegateVotes(address: string) {
-    try {
-      console.log(address);
-      const delegateTx = await this.contract.delegate(address);
-      await delegateTx.wait();
-
-      const votesAfter = await this.contract.getVotes(address);
-      console.log(votesAfter);
-      return { result: ethers.formatUnits(votesAfter) };
-    } catch (error: any) {
-      console.log(error);
-      return { error: 'There was an error' };
-    }
-  }
 }
