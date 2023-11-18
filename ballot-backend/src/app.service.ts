@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import * as tokenJson from './assets/MyToken.json';
 import { ConfigService } from '@nestjs/config';
+import { TokenizedBallot__factory } from 'typechain-types';
 
 const MINT_VALUE = ethers.parseUnits('1');
 
@@ -71,6 +72,27 @@ export class AppService {
     } catch (error) {
       console.log(error);
       return false;
+    }
+  }
+
+  async deployBallotContract(proposals: string[], targetBlockNumber: number) {
+    try {
+      const encodedProposals = proposals.map(ethers.encodeBytes32String);
+      console.log(encodedProposals);
+      const tokenizedBallotFactory = new TokenizedBallot__factory(this.wallet);
+      const tokenizedBallot = await tokenizedBallotFactory.deploy(
+        encodedProposals,
+        this.contract,
+        targetBlockNumber,
+      );
+      ethers.decodeBytes32String;
+      await tokenizedBallot.waitForDeployment();
+      const ballotAddress = await tokenizedBallot.getAddress();
+      console.log(ballotAddress);
+      return { ballotAddress };
+    } catch (error) {
+      console.log(error);
+      return { error: 'There was an error' };
     }
   }
 }

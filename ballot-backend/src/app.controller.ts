@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MintTokenDto } from './dtos/mintToken.dto';
+import { DeployBallotDto } from './dtos/deployBallot.dto';
 
 @Controller()
 export class AppController {
@@ -49,5 +50,14 @@ export class AppController {
   @Post('mint-tokens')
   async mintTokens(@Body() body: MintTokenDto) {
     return { result: await this.appService.mintTokens(body.address) };
+  }
+
+  @Post('deploy-ballot')
+  async deployBallot(@Body() body: DeployBallotDto) {
+    console.log(body);
+    return await this.appService.deployBallotContract(
+      body.proposals,
+      body.targetBlockNumber,
+    );
   }
 }
