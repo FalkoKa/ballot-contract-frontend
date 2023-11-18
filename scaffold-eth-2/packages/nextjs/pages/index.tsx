@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
+import { RequestTokens } from "~~/components/RequestTokens";
+import { TokenAddressFromApi } from "~~/components/TokenAddressFromApi";
 import { TokenInfo } from "~~/components/TokenInfo";
 import { WalletInfo } from "~~/components/WalletInfo";
 
