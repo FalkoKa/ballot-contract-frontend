@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import * as tokenJson from './assets/MyToken.json';
 import { ConfigService } from '@nestjs/config';
 
+const MINT_VALUE = ethers.parseUnits('1');
+
 @Injectable()
 export class AppService {
   contract: ethers.Contract;
@@ -49,5 +51,46 @@ export class AppService {
 
   async getTransactionReceipt(hash: string) {
     return await this.provider.getTransaction(hash);
+  }
+
+  getServerWalletAddress() {
+    return this.wallet.address;
+  }
+
+  async checkMinterRole(address: string) {
+    const minterRole = await this.contract.MINTER_ROLE();
+    const hasRole = await this.contract.hasRole(minterRole, address);
+    return hasRole;
+  }
+
+  async mintTokens(address: string) {
+    try {
+      const mintTx = await this.contract.mint(address, MINT_VALUE);
+      await mintTx.wait();
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  async transferTokens() {
+    // todo
+    return null;
+  }
+
+  async delegateVotes(address: string) {
+    try {
+      console.log(address);
+      const delegateTx = await this.contract.delegate(address);
+      await delegateTx.wait();
+
+      const votesAfter = await this.contract.getVotes(address);
+      console.log(votesAfter);
+      return { result: ethers.formatUnits(votesAfter) };
+    } catch (error: any) {
+      console.log(error);
+      return { error: 'There was an error' };
+    }
   }
 }
