@@ -61,7 +61,7 @@ export const DelegateVotes = (params: { address: string; tokenAddress: string })
   return (
     <button
       disabled={isLoading}
-      className="btn btn-active btn-neutral mb-4"
+      className="btn btn-active btn-neutral w-full mb-4"
       onClick={() => {
         writeAsync({ args: [params.address] }).then(async () => {
           const { data } = await refetch();

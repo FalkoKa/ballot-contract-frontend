@@ -10,7 +10,7 @@ export const RequestTokens = (params: { address: string }) => {
   if (!data)
     return (
       <button
-        className="btn btn-active btn-neutral mb-4"
+        className="btn btn-active btn-neutral mb-4 w-full"
         onClick={() => {
           setLoading(true);
           fetch("http://localhost:4000/mint-tokens", {

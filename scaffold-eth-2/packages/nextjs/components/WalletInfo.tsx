@@ -2,32 +2,16 @@ import { TokenInfo } from "./TokenInfo";
 import { WalletBalance } from "./WalletBalance";
 import { useAccount, useNetwork } from "wagmi";
 
-export const WalletInfo = () => {
-  const { address, isConnecting, isDisconnected } = useAccount();
-  const { chain } = useNetwork();
-  if (address)
-    return (
-      <div className="card bg-primary text-primary-content px-6 py-2">
-        <p>Your account address is {address}</p>
-        <p>Connected to the network {chain?.name}</p>
-        <WalletBalance address={address as `0x${string}`} />
-      </div>
-    );
-  if (isConnecting)
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
-  if (isDisconnected)
-    return (
-      <div>
-        <p>Wallet disconnected. Connect wallet to continue</p>
-      </div>
-    );
+export const WalletInfo = (params: { address: `0x${string}`; chain: any }) => {
   return (
-    <div>
-      <p>Connect wallet to continue</p>
+    <div className="collapse collapse-arrow bg-primary text-primary-content px-6 py-2">
+      <input type="checkbox" />
+      <div className="collapse-title text-xl font-medium">Wallet Information</div>
+      <div className="collapse-content">
+        <p>Your account address is {params.address}</p>
+        <p>Connected to the network {params.chain.name}</p>
+        <WalletBalance address={params.address as `0x${string}`} />
+      </div>
     </div>
   );
 };
