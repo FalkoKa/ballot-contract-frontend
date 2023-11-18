@@ -9,7 +9,7 @@ export const TokenInfo = (params: { address: `0x${string}`; tokenAddress: string
       <TokenName tokenAddress={params.tokenAddress} />
       <TokenBalance address={params.address} tokenAddress={params.tokenAddress} />
       <RequestTokens address={params.address as `0x${string}`} />
-      <DelegateVotes address={params.address as `0x${string}`} />
+      <DelegateVotes address={params.address as `0x${string}`} tokenAddress={params.tokenAddress} />
     </div>
   );
 };

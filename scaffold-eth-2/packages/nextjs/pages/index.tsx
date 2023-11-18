@@ -4,6 +4,7 @@ import { MetaHeader } from "~~/components/MetaHeader";
 import { RequestTokens } from "~~/components/RequestTokens";
 import { TokenAddressFromApi } from "~~/components/TokenAddressFromApi";
 import { TokenInfo } from "~~/components/TokenInfo";
+import { TransferTokenForm } from "~~/components/TransferTokenForm";
 import { WalletInfo } from "~~/components/WalletInfo";
 
 const Home: NextPage = () => {
@@ -21,10 +22,14 @@ const Home: NextPage = () => {
         </div>
         <div className="flex gap-3">
           <WalletInfo />
-          {address ? (
+          {address && (
             <TokenInfo address={address as `0x${string}`} tokenAddress="0x7fE72432Df2F96EB07236FF1d23C85d89f5b5D1F" />
-          ) : (
-            ""
+          )}
+          {address && (
+            <TransferTokenForm
+              address={address as `0x${string}`}
+              tokenAddress="0x7fE72432Df2F96EB07236FF1d23C85d89f5b5D1F"
+            />
           )}
         </div>
       </div>
