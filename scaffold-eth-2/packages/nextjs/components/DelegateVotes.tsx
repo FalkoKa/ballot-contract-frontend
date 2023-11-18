@@ -1,35 +1,75 @@
 import { useState } from "react";
+import { useContractRead, useContractWrite } from "wagmi";
 
-export const DelegateVotes = (params: { address: string }) => {
-  const [data, setData] = useState<{ result?: number; error?: string }>();
-  const [isLoading, setLoading] = useState(false);
+export const DelegateVotes = (params: { address: string; tokenAddress: string }) => {
+  const [voteBalance, setVoteBlance] = useState<string | undefined>();
+  const { isLoading, writeAsync } = useContractWrite({
+    address: params.tokenAddress,
+    abi: [
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "delegatee",
+            type: "address",
+          },
+        ],
+        name: "delegate",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+    ],
+    functionName: "delegate",
+    account: params.address,
+  });
 
-  const body = { address: params.address };
+  const { refetch } = useContractRead({
+    address: params.tokenAddress,
+    abi: [
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+        ],
+        name: "getVotes",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+    ],
+    functionName: "getVotes",
+    args: [params.address],
+  });
 
-  if (isLoading) return <p>Requesting tokens from API...</p>;
-  if (!data)
+  if (voteBalance)
     return (
-      <button
-        className="btn btn-active btn-neutral mb-4"
-        onClick={() => {
-          setLoading(true);
-          fetch("http://localhost:4000/delegate-votes", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          })
-            .then(res => res.json())
-            .then(data => {
-              setData(data);
-              setLoading(false);
-            });
-        }}
-      >
-        Delegate Votes
-      </button>
+      <>
+        <p>Success. Your voting power is now {voteBalance}</p>
+      </>
     );
 
-  if (data.error) return <p>{data.error}</p>;
-
-  return <p>You now have {data.result} votes</p>;
+  return (
+    <button
+      disabled={isLoading}
+      className="btn btn-active btn-neutral mb-4"
+      onClick={() => {
+        writeAsync({ args: [params.address] }).then(async () => {
+          const { data } = await refetch();
+          setVoteBlance(BigInt(data as number).toString());
+        });
+      }}
+    >
+      Delegate Votes
+    </button>
+  );
 };
