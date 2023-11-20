@@ -43,7 +43,7 @@ export const TransferTokenForm = (params: { address: `0x${string}`; tokenAddress
   return (
     <div className="collapse collapse-arrow bg-primary text-primary-content px-6 py-2">
       <input type="checkbox" />
-      <div className="collapse-title text-xl font-medium">Tranfer Tokens</div>
+      <div className="collapse-title text-xl font-medium">Transfer Tokens</div>
       <div className="collapse-content">
         <form
           onSubmit={e => {
