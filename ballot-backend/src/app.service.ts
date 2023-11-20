@@ -85,11 +85,23 @@ export class AppService {
         this.contract,
         targetBlockNumber,
       );
-      ethers.decodeBytes32String;
       await tokenizedBallot.waitForDeployment();
       const ballotAddress = await tokenizedBallot.getAddress();
       console.log(ballotAddress);
-      return { ballotAddress };
+
+      let proposal:
+        | ([string, bigint] & { name: string; voteCount: bigint })
+        | boolean = true;
+      let proposalIndex = 0;
+      const deployedProposals = [];
+      while (proposal) {
+        proposal = await tokenizedBallot.proposals(proposalIndex);
+        deployedProposals.push(ethers.decodeBytes32String(proposal.name));
+        proposalIndex++;
+      }
+      console.log(proposals);
+      // would need to save them somewhere or fetch them onchain on the frontend and display them
+      return { ballotAddress, proposals: deployedProposals };
     } catch (error) {
       console.log(error);
       return { error: 'There was an error' };
