@@ -14,6 +14,8 @@ export const BallotContract = (params: { address: `0x${string}`; tokenAddress?: 
   const [vote, setVote] = useState<number | undefined>();
   const [weight, setWeight] = useState<number | undefined>();
 
+  const [deployedProposals, setDeployedProposals] = useState<string[] | []>([]);
+
   const [winningProposal, setWinningProposal] = useState<string | undefined>();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -86,6 +88,7 @@ export const BallotContract = (params: { address: `0x${string}`; tokenAddress?: 
                   .then(res => res.json())
                   .then(async data => {
                     setBallotContractAddress(data.ballotAddress);
+                    setDeployedProposals(data.deployedProposals);
                     setIsLoading(false);
                   })
                   .catch(error => {
@@ -119,20 +122,17 @@ export const BallotContract = (params: { address: `0x${string}`; tokenAddress?: 
             </form>
           </div>
         )}
-        {ballotContractAddress && (
+        {/* if deployed already, fetch proposals either from onchain or from db? custom hook */}
+        {ballotContractAddress && deployedProposals.length && (
           <div>
             <div>
               <h3>Proposals</h3>
               <ol className="max-w-md space-y-1 text-gray-500 list-decimal list-inside dark:text-gray-400">
-                <li>
-                  <span className="font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
-                </li>
-                <li>
-                  <span className="font-semibold text-gray-900 dark:text-white">Jese Leos</span>
-                </li>
-                <li>
-                  <span className="font-semibold text-gray-900 dark:text-white">Leslie Livingston</span>
-                </li>
+                {deployedProposals.map(proposal => (
+                  <li>
+                    <span className="font-semibold text-gray-900 dark:text-white">{proposal}</span>
+                  </li>
+                ))}
               </ol>
             </div>
             {!isVoteSuccess ? (
